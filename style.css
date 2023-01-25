@@ -71,7 +71,7 @@ body {
   align-items: center;
   flex-grow: 0.8;
   padding: 10px 0px;
-  background-color: #f97316;
+  background-color: #22c55e;
 }
 
 .game-board {
@@ -88,9 +88,16 @@ body {
 .block {
   flex-grow: 1;
   padding: 8px;
-  border-style: solid;
-  border-color: rgba(115, 115, 115, 0.5);
-  border-width: 3px;
+}
+
+.vertical {
+  border-left: 3px solid rgba(115, 115, 115, 0.5);
+  border-right: 3px solid rgba(115, 115, 115, 0.5);
+}
+
+.horizontal {
+  border-top: 3px solid rgba(115, 115, 115, 0.5);
+  border-bottom: 3px solid rgba(115, 115, 115, 0.5);
 }
 
 #reset {
@@ -102,7 +109,7 @@ body {
   border-style: solid;
   border-color: #737373;
   background-color: #171717;
-  color: #f97316;
+  color: #22c55e;
 }
 
 #footer {
