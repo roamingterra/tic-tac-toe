@@ -19,11 +19,10 @@ const playerX = playerFactory("X", "images/x-icon.png");
 const playerO = playerFactory("O", "images/o-icon.png");
 
 // Block factory function
-const blockFactory = (element) => {
-  const blockElement = () => element;
-  let blockStatus = () => "empty";
+const blockFactory = () => {
+  let blockStatus = "empty";
 
-  return { blockElement, blockStatus };
+  return { blockStatus };
 };
 
 // Gameboard module (Make each block an object based on block factory function, then store them in array)
@@ -34,8 +33,7 @@ const gameBoard = (() => {
   for (let i = 0; i < board.children.length; i++) {
     let child = board.children[i];
     for (let j = 0; j < child.children.length; j++) {
-      const blockElement = child.children[j];
-      let block = blockFactory(blockElement);
+      let block = blockFactory();
       gameBoardBlocks.push(block);
     }
   }
@@ -43,6 +41,20 @@ const gameBoard = (() => {
 })();
 
 // Add marker to board function, onclick attribute function that places icon in chosen spot
+function changeBlockStatus(event) {
+  // Check block status
+  const regExp = /[0-9]$/;
+  const blockNumber = event.target.className.match(regExp);
+  console.log(blockNumber);
+  console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
+
+  // Change block status
+  if (gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus === "empty") {
+    gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus = "not empty"; //This will be changed once game flow is established
+    console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
+  }
+  // Insert player marker
+}
 
 // Check for winner function
 
