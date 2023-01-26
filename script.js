@@ -18,22 +18,34 @@ const playerX = playerFactory("X", "images/x-icon.png");
 // Player O object created from factory function
 const playerO = playerFactory("O", "images/o-icon.png");
 
-// Gameboard module (I WAS TRYING TO STORE ALL GAME BLOCKS IN THE ARRAY, BUT I REALIZED I'M NOT STORING OBJECTS. I HAVE TO RETHINK THIS)
-// const gameBoard = (() => {
-//     let gameBoard = []
-//     const board = document.querySelector(".game-board");
-//     for(let i=0; i < board.childNodes.length; i++){
-//         let child = board.childNodes[i];
-//         for(let j=0; j < child.childNodes.length; i++){
+// Block factory function
+const blockFactory = (element) => {
+  const blockElement = () => element;
+  let blockStatus = () => "empty";
 
-//         }
-//     }
-//     const block1 = document.querySelector()
-// })();
-//      gameboard array
+  return { blockElement, blockStatus };
+};
+
+// Gameboard module (Make each block an object based on block factory function, then store them in array)
+
+const gameBoard = (() => {
+  let gameBoardBlocks = [];
+  const board = document.querySelector(".game-board");
+  for (let i = 0; i < board.children.length; i++) {
+    let child = board.children[i];
+    for (let j = 0; j < child.children.length; j++) {
+      const blockElement = child.children[j];
+      let block = blockFactory(blockElement);
+      gameBoardBlocks.push(block);
+    }
+  }
+  return { gameBoardBlocks };
+})();
 
 // Add marker to board function, onclick attribute function that places icon in chosen spot
 
 // Check for winner function
 
 // Restart game function
+
+// Test
