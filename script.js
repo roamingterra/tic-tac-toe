@@ -40,7 +40,11 @@ const gameFlow = (() => {
   const blocks = document.querySelectorAll(".block");
 
   blocks.forEach((block) => {
-    block.addEventListener("click", changeBlockStatus);
+    block.addEventListener("click", (event) => {
+      changeBlockStatus(event);
+      changeTurns(event);
+      addMarker(event);
+    });
   });
   //      Check for winner function
 })();
@@ -56,15 +60,12 @@ function changeBlockStatus(event) {
     } else if (playerO.myTurn) {
       currentBlock.blockStatus = playerO.playerName;
     }
-
-    changeTurns();
-
-    addMarker(blockNumber);
   }
 }
 
 // Add marker to board function
-function addMarker(blockNumber) {
+function addMarker(event) {
+  const blockNumber = event.target.id;
   let block = document.getElementById(blockNumber);
   let currentBlock = gameBoard.gameBoardBlocks[blockNumber - 1];
   if (currentBlock.blockStatus === playerX.playerName) {
