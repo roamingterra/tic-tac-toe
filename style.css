@@ -86,8 +86,12 @@ body {
 }
 
 .block {
-  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-basis: 66px;
   padding: 8px;
+  object-fit: contain;
 }
 
 .vertical {
