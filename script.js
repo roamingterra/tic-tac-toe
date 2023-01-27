@@ -53,17 +53,12 @@ function changeBlockStatus(event) {
   if (currentBlock.blockStatus === "empty") {
     if (playerX.myTurn) {
       currentBlock.blockStatus = playerX.playerName;
-      // Change turns
-      playerX.myTurn = false;
-      playerO.myTurn = true;
     } else if (playerO.myTurn) {
       currentBlock.blockStatus = playerO.playerName;
-      // Change turns
-      playerX.myTurn = true;
-      playerO.myTurn = false;
     }
 
-    // Call new add marker function
+    changeTurns();
+
     addMarker(blockNumber);
   }
 }
@@ -79,6 +74,17 @@ function addMarker(blockNumber) {
   }
   block.appendChild(currentBlock.blockMarker);
   currentBlock.blockMarker.style.width = "30px";
+}
+
+// Change turns function
+function changeTurns() {
+  if (playerX.myTurn) {
+    playerX.myTurn = false;
+    playerO.myTurn = true;
+  } else if (playerO.myTurn) {
+    playerX.myTurn = true;
+    playerO.myTurn = false;
+  }
 }
 
 // Check for winner function
