@@ -1,22 +1,18 @@
-// Control flow of game object (module?)
-//      Player X turn
-//      Check for winner function
-//      Player Y turn
-//      Check for winner funciton
-
 // Player factory function
-const playerFactory = (name, icon) => {
-  const playerName = () => name;
+const playerFactory = (name, icon, turn) => {
+  const playerName = name;
   const playerIcon = document.createElement("img");
   playerIcon.src = icon;
+  playerIcon.style.width = "30px";
+  let myTurn = turn;
   let score = 0;
 
-  return { playerName, playerIcon, score };
+  return { playerName, playerIcon, myTurn, score };
 };
 // Player X object created from factory function
-const playerX = playerFactory("X", "images/x-icon.png");
+const playerX = playerFactory("X", "images/x-icon.png", true);
 // Player O object created from factory function
-const playerO = playerFactory("O", "images/o-icon.png");
+const playerO = playerFactory("O", "images/o-icon.png", false);
 
 // Block factory function
 const blockFactory = () => {
@@ -26,7 +22,6 @@ const blockFactory = () => {
 };
 
 // Gameboard module (Make each block an object based on block factory function, then store them in array)
-
 const gameBoard = (() => {
   let gameBoardBlocks = [];
   const board = document.querySelector(".game-board");
@@ -40,20 +35,65 @@ const gameBoard = (() => {
   return { gameBoardBlocks };
 })();
 
-// Add marker to board function, onclick attribute function that places icon in chosen spot
+// Control flow of game object module
+const gameFlow = (() => {
+  let continueGame = true;
+  const blocks = document.querySelectorAll(".block");
+
+  blocks.forEach((block) => {
+    block.addEventListener("click", changeBlockStatus);
+  });
+  //      Check for winner function
+})();
+
 function changeBlockStatus(event) {
   // Check block status
   const regExp = /[0-9]$/;
   const blockNumber = event.target.className.match(regExp);
-  console.log(blockNumber);
-  console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
+  // console.log(blockNumber);
+  // console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
 
   // Change block status
   if (gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus === "empty") {
-    gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus = "not empty"; //This will be changed once game flow is established
-    console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
+    if (playerX.myTurn) {
+      gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus =
+        playerX.playerName;
+      // Change turns
+      playerX.myTurn = false;
+      playerO.myTurn = true;
+      // console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
+    } else if (playerO.myTurn) {
+      gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus =
+        playerO.playerName;
+      // Change turns
+      playerX.myTurn = true;
+      playerO.myTurn = false;
+      // console.log(gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus);
+    }
+
+    // Call new add marker function
+    addMarker(blockNumber);
   }
-  // Insert player marker
+}
+
+// Add marker to board function
+function addMarker(blockNumber) {
+  let block = document.getElementById(blockNumber);
+  let blockMarker = "";
+  if (
+    gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus ===
+    playerX.playerName
+  ) {
+    blockMarker = playerX.playerIcon;
+  } else if (
+    gameBoard.gameBoardBlocks[blockNumber - 1].blockStatus ===
+    playerO.playerName
+  ) {
+    blockMarker.src = playerO.playerIcon;
+    blockMarker = playerO.playerIcon;
+  }
+
+  block.appendChild(blockMarker);
 }
 
 // Check for winner function
