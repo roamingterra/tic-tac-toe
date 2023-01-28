@@ -1,95 +1,102 @@
+// Arrays to hold tic tac toe spaces, and players
+let gameBoardBlocks = [];
+let players = [];
+
 // Player factory function
-const playerFactory = (name, icon, turn) => {
-  const playerName = name;
-  const playerIcon = icon;
-  let myTurn = turn;
+const playerFactory = (playerName, icon, turn) => {
+  const getPlayerName = () => playerName; // get functions accesses the value of the property
+  const getPlayerIcon = () => icon;
+  let getMyTurn = () => turn;
   let score = 0;
 
-  return { playerName, playerIcon, myTurn, score };
+  let changeTurns = () => {
+    // And this would be a setter function, setting the value of the property
+    if (turn === true) {
+      turn = false;
+    } else if (turn === false) {
+      turn = true;
+    }
+  };
+
+  return {
+    // Note: JavaScript is always pass-by-value. This is why we need setters to change property values, and getters to access the values of those properties. Without the getter, the returned property value is always the original declared value
+    getPlayerName,
+    getPlayerIcon,
+    getMyTurn,
+    changeTurns,
+  };
 };
-// Player X object created from factory function
-const playerX = playerFactory("X", "images/x-icon.png", true);
-// Player O object created from factory function
-const playerO = playerFactory("O", "images/o-icon.png", false);
+
+const playerX = playerFactory("X", "images/x-icon.png", true); // Player X starts
+players.push(playerX);
+
+const playerO = playerFactory("O", "images/o-icon.png", false); // Player O does not start
+players.push(playerO);
 
 // Block factory function
-const blockFactory = () => {
-  let blockStatus = "empty";
+const blockFactory = (blockStatus, blockNumber) => {
   let blockMarker = document.createElement("img");
 
-  return { blockStatus, blockMarker };
+  let changeBlockStatus = () => {
+    if (blockStatus === "empty") {
+      if (players[0].getMyTurn()) {
+        blockStatus = players[0].getPlayerName();
+      } else if (players[1].getMyTurn()) {
+        blockStatus = players[1].getPlayerName();
+      }
+    }
+  };
+
+  let addMarker = () => {
+    if (blockStatus === "X") {
+      // apply block marker source according to block status
+      blockMarker.src = playerX.getPlayerIcon();
+    } else if (blockStatus === "O") {
+      // apply block marker source according to block status
+      blockMarker.src = playerO.getPlayerIcon();
+    }
+    // append blockMarker to element
+    document.getElementById(blockNumber).appendChild(blockMarker);
+    blockMarker.style.width = "30px";
+  };
+
+  return {
+    changeBlockStatus,
+    addMarker,
+  };
 };
 
-// Gameboard module (Make each block an object based on block factory function, then store them in array)
+// Gameboard module to make block objects and store in gameBoardBlocks array
 const gameBoard = (() => {
-  let gameBoardBlocks = [];
   const board = document.querySelector(".game-board");
   for (let i = 0; i < board.children.length; i++) {
     let child = board.children[i];
     for (let j = 0; j < child.children.length; j++) {
-      let block = blockFactory();
+      let block = blockFactory("empty", i * 3 + (j + 1));
       gameBoardBlocks.push(block);
     }
   }
-  return { gameBoardBlocks };
 })();
 
-// Control flow of game object module
+// gameFlow module to control the progress of the game
 const gameFlow = (() => {
   let continueGame = true;
   const blocks = document.querySelectorAll(".block");
 
   blocks.forEach((block) => {
     block.addEventListener("click", (event) => {
-      changeBlockStatus(event);
-      changeTurns(event);
-      addMarker(event);
+      const blockNumber = event.target.id;
+      // Check to see if element clicked is a block and not a newly created player marker
+      if (blockNumber) {
+        // Change block status
+        gameBoardBlocks[blockNumber - 1].changeBlockStatus();
+        // Change turn status for all players
+        players[0].changeTurns();
+        players[1].changeTurns();
+        // Add player marker to block
+        gameBoardBlocks[blockNumber - 1].addMarker();
+      }
     });
   });
   //      Check for winner function
 })();
-
-function changeBlockStatus(event) {
-  const blockNumber = event.target.id;
-  let currentBlock = gameBoard.gameBoardBlocks[blockNumber - 1];
-
-  // Change block status
-  if (currentBlock.blockStatus === "empty") {
-    if (playerX.myTurn) {
-      currentBlock.blockStatus = playerX.playerName;
-    } else if (playerO.myTurn) {
-      currentBlock.blockStatus = playerO.playerName;
-    }
-  }
-}
-
-// Add marker to board function
-function addMarker(event) {
-  const blockNumber = event.target.id;
-  let block = document.getElementById(blockNumber);
-  let currentBlock = gameBoard.gameBoardBlocks[blockNumber - 1];
-  if (currentBlock.blockStatus === playerX.playerName) {
-    currentBlock.blockMarker.src = playerX.playerIcon;
-  } else if (currentBlock.blockStatus === playerO.playerName) {
-    currentBlock.blockMarker.src = playerO.playerIcon;
-  }
-  block.appendChild(currentBlock.blockMarker);
-  currentBlock.blockMarker.style.width = "30px";
-}
-
-// Change turns function
-function changeTurns() {
-  if (playerX.myTurn) {
-    playerX.myTurn = false;
-    playerO.myTurn = true;
-  } else if (playerO.myTurn) {
-    playerX.myTurn = true;
-    playerO.myTurn = false;
-  }
-}
-
-// Check for winner function
-
-// Restart game function
-
-// Test
