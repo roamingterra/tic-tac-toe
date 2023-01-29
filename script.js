@@ -4,8 +4,8 @@ let players = [];
 
 // Player factory function
 const playerFactory = (playerName, icon, turn) => {
-  const getPlayerName = () => playerName; // get functions accesses the value of the property
-  const getPlayerIcon = () => icon;
+  getPlayerName = () => playerName; // get functions accesses the value of the property
+  const getPlayerIcon = () => icon; // Also, arrow functions automatically return a value when there is one statement
   let getMyTurn = () => turn;
   let score = 0;
 
@@ -27,10 +27,10 @@ const playerFactory = (playerName, icon, turn) => {
   };
 };
 
-const playerX = playerFactory("X", "images/x-icon.png", true); // Player X starts
+const playerX = playerFactory("x", "images/x-icon.png", true); // Player X starts
 players.push(playerX);
 
-const playerO = playerFactory("O", "images/o-icon.png", false); // Player O does not start
+const playerO = playerFactory("o", "images/o-icon.png", false); // Player O does not start
 players.push(playerO);
 
 // Block factory function
@@ -48,10 +48,10 @@ const blockFactory = (blockStatus, blockNumber) => {
   };
 
   let addMarker = () => {
-    if (blockStatus === "X") {
+    if (blockStatus === "x") {
       // apply block marker source according to block status
       blockMarker.src = playerX.getPlayerIcon();
-    } else if (blockStatus === "O") {
+    } else if (blockStatus === "o") {
       // apply block marker source according to block status
       blockMarker.src = playerO.getPlayerIcon();
     }
@@ -78,10 +78,37 @@ const gameBoard = (() => {
   }
 })();
 
+// Style page module to style the page dynamically
+const stylePage = (() => {
+  // Create function that highlights player when it is their turn
+  let highlightPlayer = () => {
+    let playerXScore = document.querySelector(".x-score");
+    let playerOScore = document.querySelector(".o-score");
+    if (playerX.getMyTurn() === true) {
+      playerXScore.style.borderBottomColor = "#22c55e";
+      playerXScore.style.borderBottomWidth = "5px";
+
+      playerOScore.style.borderBottomColor = "#737373";
+      playerOScore.style.borderBottomWidth = "2px";
+    } else if (playerO.getMyTurn() === true) {
+      playerXScore.style.borderBottomColor = "#737373";
+      playerXScore.style.borderBottomWidth = "2px";
+
+      playerOScore.style.borderBottomColor = "#22c55e";
+      playerOScore.style.borderBottomWidth = "5px";
+    }
+  };
+
+  return { highlightPlayer };
+})();
+
 // gameFlow module to control the progress of the game
 const gameFlow = (() => {
   let continueGame = true;
   const blocks = document.querySelectorAll(".block");
+
+  // Highlight player who's turn it is at the beginning of the game
+  stylePage.highlightPlayer();
 
   blocks.forEach((block) => {
     block.addEventListener("click", (event) => {
@@ -93,6 +120,8 @@ const gameFlow = (() => {
         // Change turn status for all players
         players[0].changeTurns();
         players[1].changeTurns();
+        // Change highlighted player after turns switch
+        stylePage.highlightPlayer();
         // Add player marker to block
         gameBoardBlocks[blockNumber - 1].addMarker();
       }
