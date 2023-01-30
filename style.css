@@ -47,6 +47,7 @@ body {
 .score-container {
   display: flex;
   gap: 100px;
+  padding-top: 20px;
 }
 
 .x-score,
