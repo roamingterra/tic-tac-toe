@@ -25,12 +25,24 @@
             <span>-</span>
           </span>
         </div>
-        <div class="current-player-turn">
-          <span>-</span>
-          <span>Turn</span>
-        </div>
+        <div class="current-player-turn"></div>
       </div>
       <div id="game-container">
+        <div class="x-winner">
+          <img src="images/x-icon.png" alt="x marker" />
+          <h3>WINNER!</h3>
+        </div>
+        <div class="o-winner">
+          <img src="images/o-icon.png" alt="o marker" />
+          <h3>WINNER!</h3>
+        </div>
+        <div class="draw">
+          <div>
+            <img src="images/x-icon.png" alt="x marker" />
+            <img src="images/o-icon.png" alt="o marker" />
+          </div>
+          <h3>DRAW!</h3>
+        </div>
         <div class="game-board">
           <div class="row">
             <span id="1" class="block"></span>
@@ -49,9 +61,9 @@
           </div>
         </div>
       </div>
-      <div id="reset">
+      <button id="reset">
         <div>Reset</div>
-      </div>
+      </button>
     </div>
     <div id="footer">
       <div class="item-1">Website created by Daniel Ballerini</div>

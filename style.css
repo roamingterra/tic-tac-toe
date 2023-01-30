@@ -60,11 +60,6 @@ body {
   border-color: #737373;
 }
 
-.current-player-turn {
-  display: flex;
-  gap: 10px;
-}
-
 #game-container {
   display: flex;
   justify-content: center;
@@ -78,6 +73,44 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+/* Winner boards */
+
+.x-winner {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 192px;
+}
+
+.o-winner {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 192px;
+}
+
+.draw {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 192px;
+}
+
+img {
+  width: 120px;
+}
+
+h3 {
+  font-size: 2rem;
+  margin: 0;
+  padding-top: 20px;
+}
+
+/* End of winner boards */
 
 .row {
   display: flex;
@@ -111,9 +144,16 @@ body {
   flex-grow: 0.2;
   border-bottom: 2px;
   border-style: solid;
+  z-index: 100;
+  cursor: pointer;
+  font-family: "Roboto Bold";
   border-color: #737373;
   background-color: #171717;
   color: #22c55e;
+}
+
+#reset:active {
+  box-shadow: 0 0 20px white;
 }
 
 #footer {
